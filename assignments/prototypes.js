@@ -68,6 +68,41 @@ Humanoid.prototype.greet = function(){
 };
 
 
+function Hero(object) {
+    Humanoid.call(this, object);
+    this.status = object.status;
+
+
+}
+Hero.prototype = Object.create(Humanoid.prototype);
+Hero.prototype.lightAttack = function(character) {
+    let attackStrength = Math.ceil(Math.random() * 10);
+    if (attackStrength > 2) {
+        character.healthPoints -= attackStrength;
+        if (character.healthPoints <= 0) {
+        }
+        return `${this.name} landed a successfull ${this.weapons[0]} attack on ${character.name} for ${attackStrength} damage!`;
+    } else {
+        return `${this.name} did not successfully land an attack.`;
+    }
+};
+
+function Villain(object) {
+    Humanoid.call(this, object);
+    this.status = object.status;
+}
+
+Villain.prototype = Object.create(Humanoid.prototype);
+Villain.prototype.darkAttack = function(character) {
+    let attackStrength = Math.ceil(Math.random() * 4);
+    if (attackStrength > 3) {
+        character.healthPoints -= attackStrength;
+        return `${this.name} landed a successfull ${this.weapons[0]} attack on ${character.name} for ${attackStrength} damage!`;
+    } else {
+        return `${this.name} did not successfully land an attack.`;
+    }
+}
+
 /*
   * Inheritance chain: GameObject -> CharacterStats -> Humanoid
   * Instances of Humanoid should have all of the same properties as CharacterStats and GameObject.
@@ -77,7 +112,7 @@ Humanoid.prototype.greet = function(){
 // Test you work by un-commenting these 3 objects and the list of console logs below:
 
 
-  const mage = new Humanoid({
+  const mage = new Villain({
     createdAt: new Date(),
     dimensions: {
       length: 2,
@@ -91,6 +126,7 @@ Humanoid.prototype.greet = function(){
       'Staff of Shamalama',
     ],
     language: 'Common Tongue',
+    status: 'Villain',
   });
 
   const swordsman = new Humanoid({
@@ -110,7 +146,7 @@ Humanoid.prototype.greet = function(){
     language: 'Common Tongue',
   });
 
-  const archer = new Humanoid({
+  const archer = new Hero({
     createdAt: new Date(),
     dimensions: {
       length: 1,
@@ -125,6 +161,7 @@ Humanoid.prototype.greet = function(){
       'Dagger',
     ],
     language: 'Elvish',
+    status: 'Hero',
   });
 
   console.log(mage.createdAt); // Today's date
@@ -137,7 +174,12 @@ Humanoid.prototype.greet = function(){
   console.log(archer.greet()); // Lilith offers a greeting in Elvish.
   console.log(mage.takeDamage()); // Bruce took damage.
   console.log(swordsman.destroy()); // Sir Mustachio was removed from the game.
-
+  console.log(mage.status); // Villain
+  console.log(archer.status); // Hero
+  console.log(archer.lightAttack(mage)); //
+  console.log(mage.darkAttack(archer)); //
+  console.log(`${mage.name} currently has ${mage.healthPoints} healthPoints.`);
+  console.log(`${archer.name} currently has ${archer.healthPoints} healthPoints.`);
 
   // Stretch task:
   // * Create Villain and Hero constructor functions that inherit from the Humanoid constructor function.
